@@ -44,7 +44,7 @@
                         if( isset($love_list) ) {
 
                             for($q=0; $q<sizeof($love_list); $q++) {    
-                                if($arr[$i]['id'] == $love_list[$q]['pro_id']) {
+                                if($arr[$i]['Id'] == $love_list[$q]['pro_id']) {
                                     $like = true;
                                     break;
                                 }
@@ -57,7 +57,7 @@
                 ?>
 
                 <form class="left_form" action="../Controllers/action_add_to_love.php" method="post">
-                    <input type="hidden" name="id" value="<?php echo $arr[$i]['id'] ?>">
+                    <input type="hidden" name="id" value="<?php echo $arr[$i]['Id'] ?>">
                     <button type="submit" class="main-btn icon-btn"><i class="fa fa-heart"></i></button>
                 </form>
 
@@ -65,7 +65,7 @@
 
                 <i class="fa fa-heart fa-2x like"></i>
                 <form class="left_form" action="../Controllers/action_remove_from_love.php" method="post">
-                    <input type="hidden" name="id" value="<?php echo $arr[$i]['id'] ?>">
+                    <input type="hidden" name="id" value="<?php echo $arr[$i]['Id'] ?>">
                     <button type="submit" class="main-btn icon-btn"><i class="fa fa-exchange"></i></button>
                 </form>
 
