@@ -68,12 +68,14 @@
                         $my_pro = new Product(NULL);
                         
                         $res = $inv->get_invoice($_SESSION['s_id']);
+
+                        if( isset($res) ) {
                         
-                        for($i=0; $i<count($res); $i++) {
-                            $total_cost = $res[$i]['total_cost'];
-                            $pay_method = $res[$i]['pay_method'];
-                            $products = explode(".", $res[$i]['products']);
-                            $quants = explode(".", $res[$i]['quantities']);
+                            for($i=0; $i<count($res); $i++) {
+                                $total_cost = $res[$i]['total_cost'];
+                                $pay_method = $res[$i]['pay_method'];
+                                $products = explode(".", $res[$i]['products']);
+                                $quants = explode(".", $res[$i]['quantities']);
                     ?>
 
                     <div class="col-md-12">
@@ -137,7 +139,7 @@
                         </div>
                     </div>
 
-                    <?php } } ?>
+                    <?php } } } ?>
 
                 </form>
             </div>
