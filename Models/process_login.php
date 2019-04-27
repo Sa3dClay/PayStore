@@ -2,15 +2,16 @@
 session_start();
 
 include_once './DataBase.php';
-include_once '../Controllers/Admin.php';
+include_once '../Controllers/UserFactory.php';
 $file_name = './credential.php';
+
 $db = DataBase::getInstance($file_name);
 $conn = $db->get_connection();
 
 $email = mysqli_real_escape_string($conn, filter_input(INPUT_POST, 'email'));
 $pass  = mysqli_real_escape_string($conn, filter_input(INPUT_POST, 'pass' ));
 
-$admin = new Admin();
+$admin = UserFactory::build('Admin');
 
 if($email == $admin->email) {
     $check = $admin->log_in($pass);
@@ -34,7 +35,7 @@ if($email == $admin->email) {
         $bool = false;
 
         while($row = mysqli_fetch_assoc($result)) {
-            if($email == $row['email']) {    
+            if($email == $row['email']) {
                 $bool = true;
                 break;
             }
@@ -48,8 +49,7 @@ if($email == $admin->email) {
                 die("Error in query");
             } else {
                 $row2 = mysqli_fetch_assoc($result2);
-                include_once '../Controllers/Customer.php';
-                $cu = new Customer();
+                $cu = UserFactory::build('Customer');
                 if($pass != $row2['password']) {
                     echo "<SCRIPT> alert('Wrong email or password');</SCRIPT>";
                     echo "<script> window.location.assign('../Views/login.php'); </script>";

@@ -1,13 +1,15 @@
 <?php
 session_start();
 
-if(isset($_REQUEST['email'])&&isset($_REQUEST['password'])&&isset($_REQUEST['name'])&&isset($_REQUEST['age'])){          
-    
+if(isset($_REQUEST['email'])&&isset($_REQUEST['password'])&&isset($_REQUEST['name'])&&isset($_REQUEST['age'])){
+
     include_once './DataBase.php';
+    include_once '../Controllers/UserFactory.php';
+
     $file_name = "./credential.php";
     $db = DataBase::getInstance($file_name);
     $conn = $db->get_connection();
-    
+
     $name     = mysqli_real_escape_string($conn,$_POST['name']);
     $age      = filter_input(INPUT_POST, 'age');
     $email    = mysqli_real_escape_string($conn,$_POST['email']);
@@ -37,13 +39,12 @@ if(isset($_REQUEST['email'])&&isset($_REQUEST['password'])&&isset($_REQUEST['nam
                     break;
                 }
             }
-            
+
             if(!$bool) {
                 echo '<SCRIPT> alert("This email is already exist");</SCRIPT>';
                 echo "<script> window.location.assign('../Views/register.php'); </script>";
             } else {
-                include_once '../Controllers/Customer.php';
-                $cu = new Customer();
+                $cu = UserFactory::build('Customer');
                 $pass = $password;
                 $query   = "INSERT into customer (name, age, email, password) VALUES('" . $name . "','" . $age . "','" . $email . "','" . $pass . "')";
                 $success = $conn->query($query);
@@ -52,25 +53,25 @@ if(isset($_REQUEST['email'])&&isset($_REQUEST['password'])&&isset($_REQUEST['nam
                     die("Couldn't enter data: " . $conn->error);
                 } else {
                     echo '<SCRIPT> alert("The registration has been completed\n,Thank You");</SCRIPT>';
-                    
+
                     $my_query2 = "SELECT id FROM customer where email = '$email'";
                     $result = mysqli_query($conn, $my_query2);
                     $row = mysqli_fetch_assoc($result);
                     $id = $row['id'];
-                    
+
                     $_SESSION['s_id'] = $id;
                     $_SESSION['s_name'] = $name;
-                    
+
                     if(isset($_SESSION['s_id']) && isset($_SESSION['s_name'])) {
-                        echo '<SCRIPT> alert("you are logged in now");</SCRIPT>';
-                         echo "<script> window.location.assign('../Views/index.php'); </script>";
+                        // echo '<SCRIPT> alert("you are logged in now");</SCRIPT>';
+                        echo "<script> window.location.assign('../Views/index.php'); </script>";
                     } else {
                         echo '<SCRIPT> alert("something went wrong please login again");</SCRIPT>';
                         echo "<script> window.location.assign('../Views/login.php'); </script>";
                     }
-                    
+
                 }
-                
+
             }
         }
     }
